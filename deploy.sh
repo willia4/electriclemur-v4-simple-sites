@@ -20,15 +20,15 @@ for SITE in $(cat sites.json | jq -r '.sites | keys | .[]')
 do
   VOLUME_DIR="/volumes/simple_sites/${SITE}"
   echo "Creating data directory for $SITE: ${VOLUME_DIR}"
-  ssh root@v4.electriclemur.com -v -i "$SSH_KEY_PATH" "mkdir -p ${VOLUME_DIR}"
-  ssh root@v4.electriclemur.com -v -i "$SSH_KEY_PATH" "chmod -R a+rwx ${VOLUME_DIR}"
+  ssh root@v4.electriclemur.com -i "$SSH_KEY_PATH" "mkdir -p ${VOLUME_DIR}"
+  ssh root@v4.electriclemur.com -i "$SSH_KEY_PATH" "chmod -R a+rwx ${VOLUME_DIR}"
 
   SITE_HOST=$(cat sites.json | jq -r ".sites[\"${SITE}\"].hostname")
 
-  CONTAINER_ID=$(ssh "root@v4.electriclemur.com" "docker ps --filter 'name=site_${SITE}' -q")
+  CONTAINER_ID=$(ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker ps --filter 'name=site_${SITE}' -q")
   if [[ -n "$CONTAINER_ID" ]]; then
     echo "site_${SITE} container already exists; removing it"
-    ssh "root@v4.electriclemur.com" "docker rm --force site_${SITE}" > /dev/null
+    ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker rm --force site_${SITE}" > /dev/null
   fi
 
   echo "Creating container for ${SITE_HOST}"
