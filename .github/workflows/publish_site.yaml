@@ -28,7 +28,7 @@ jobs:
         run: |
           chmod +x ./deploy.sh
           chmod +x ./deploy_crowglass.sh
-          
+
           ./deploy.sh ~/.ssh/id
           ./deploy_crowglass.sh ~/.ssh/id
 

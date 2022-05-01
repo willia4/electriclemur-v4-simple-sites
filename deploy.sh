@@ -14,7 +14,7 @@ if [[ ! -f "$SSH_KEY_PATH" ]]; then
   exit 2
 fi
 
-echo "Connecting with key at $SSH_KEY_PATH"
+echo "Connecting with key at $SSH_KEY_PATH: $(cat $SSH_KEY_PATH | sha256sum)"
 
 for SITE in $(cat sites.json | jq -r '.sites | keys | .[]')
 do
