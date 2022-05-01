@@ -24,6 +24,7 @@ do
   ssh root@v4.electriclemur.com -i "$SSH_KEY_PATH" "chmod -R a+rwx ${VOLUME_DIR}"
 
   SITE_HOST=$(cat sites.json | jq -r ".sites[\"${SITE}\"].hostname")
+  ENABLE_TLS=$(cat sites.json | jq -r ".sites[\"${SITE}\"].enable_tls")
 
   CONTAINER_ID=$(ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker ps --filter 'name=site_${SITE}' -q")
   if [[ -n "$CONTAINER_ID" ]]; then
@@ -37,14 +38,20 @@ do
   CMD+="docker run -d --name site_${SITE} "
   CMD+="--label 'traefik.http.routers.${SITE}.entrypoints=websecure' "
   CMD+="--label 'traefik.http.routers.${SITE}.rule=Host(\`${SITE_HOST}\`)' "
-  #CMD+="--label 'traefik.http.routers.${SITE}.tls=true' "
-  #CMD+="--label 'traefik.http.routers.${SITE}.tls.certresolver=le' "
+
+  if [[ "$ENABLE_TLS" = "true" ]]; then
+    echo "Enabling TLS for ${SITE}"
+    CMD+="--label 'traefik.http.routers.${SITE}.tls=true' "
+    CMD+="--label 'traefik.http.routers.${SITE}.tls.certresolver=le' "
+  fi
 
   CMD+="--label 'traefik.http.routers.${SITE}_redirect.entrypoints=web' "
   CMD+="--label 'traefik.http.routers.${SITE}_redirect.rule=Host(\`${SITE_HOST}\`)' "
-  #CMD+="--label 'traefik.http.routers.${SITE}_redirect.middlewares=${SITE}_redirect' "
-  #CMD+="--label 'traefik.http.middlewares.${SITE}_redirect.redirectscheme.scheme=https' "
-  
+  if [[ "$ENABLE_TLS" = "true" ]]; then
+    CMD+="--label 'traefik.http.routers.${SITE}_redirect.middlewares=${SITE}_redirect' "
+    CMD+="--label 'traefik.http.middlewares.${SITE}_redirect.redirectscheme.scheme=https' "
+  fi
+
   CMD+="-v ${VOLUME_DIR}:/var/www "
   CMD+="willia4/nginx_static_php:3.0.1 "
 

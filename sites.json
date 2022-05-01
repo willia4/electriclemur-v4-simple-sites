@@ -1,27 +1,28 @@
 {
   "sites": {
     "branheatherby_com": {
-      "hostname": "branheatherby.com"
+      "hostname": "branheatherby.com",
+      "enable_tls": true
     },
 
     "dalhraidia_com": {
-      "hostname": "dalhraidia.com"
+      "hostname": "dalhraidia.com",
+      "enable_tls": true
     },
 
     "mydwynter_com": {
-      "hostname": "mydwynter.com"
-    },
-
-    "mydwynterstudios_com": {
-      "hostname": "mydwynterstudios.com"
+      "hostname": "mydwynter.com",
+      "enable_tls": true
     },
 
     "mydwyntertea_com": {
-      "hostname": "mydwyntertea.com"
+      "hostname": "mydwyntertea.com",
+      "enable_tls": true
     },
 
     "crowglassdesign_com": {
-      "hostname": "crowglassdesign.com"
+      "hostname": "crowglassdesign.com",
+      "enable_tls": true
     }
   }
 }
