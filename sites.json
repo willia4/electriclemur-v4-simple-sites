@@ -1,0 +1,27 @@
+{
+  "sites": {
+    "branheatherby_com": {
+      "hostname": "branheatherby.com"
+    },
+
+    "dalhraidia_com": {
+      "hostname": "dalhraidia.com"
+    },
+
+    "mydwynter_com": {
+      "hostname": "mydwynter.com"
+    },
+
+    "mydwynterstudios_com": {
+      "hostname": "mydwynterstudios.com"
+    },
+
+    "mydwyntertea_com": {
+      "hostname": "mydwyntertea.com"
+    },
+
+    "crowglassdesign.com": {
+      "hostname": "crowglassdesign.com"
+    }
+  }
+}

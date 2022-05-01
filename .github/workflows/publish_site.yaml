@@ -1,0 +1,33 @@
+name: Publish Site
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+jobs:
+  Publish-Site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install SSH Key And Test Connection
+        run: |
+          mkdir -p ~/.ssh/
+          install -m 600 -D /dev/null ~/.ssh/id
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id
+          
+          SSH_HOST_PUBLIC_KEY=$(ssh-keyscan -t ed25519 v4.electriclemur.com 2> /dev/null)
+          echo "$SSH_HOST_PUBLIC_KEY" >> ~/.ssh/known_hosts
+
+          SSH_HOST_PUBLIC_KEY=$(echo "$SSH_HOST_PUBLIC_KEY" | sed 's/^[a-z0-9\.]* //g')
+          echo "{SSH_HOST_PUBLIC_KEY}={${SSH_HOST_PUBLIC_KEY}}" >> $GITHUB_ENV
+
+          SSH_HOST=$(ssh root@v4.electriclemur.com -i ~/.ssh/id "hostname")
+          test "$SSH_HOST" = "lemur-web01"
+      - name: Deploy sites
+        run: |
+          ./deploy.sh ~/.ssh/id
+          ./deploy_crowglass.sh ~/.ssh/id
+
+
+
