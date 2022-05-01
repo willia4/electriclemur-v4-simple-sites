@@ -2,6 +2,7 @@
 set -e
 
 SSH_KEY_PATH="$1"
+SPECIFIC_SITE="$2"
 
 if [[ -z "$SSH_KEY_PATH" ]]; then
   >&2 echo "SSH Key Path is required"
@@ -16,7 +17,12 @@ fi
 
 echo "Connecting with key at $SSH_KEY_PATH: $(cat $SSH_KEY_PATH | sha256sum)"
 
-for SITE in $(cat sites.json | jq -r '.sites | keys | .[]')
+SITES=$(cat sites.json | jq -r '.sites | keys | .[]')
+if [[ -n "$SPECIFIC_SITE" ]]; then
+  SITES=$(echo "$SITES" | grep "$SPECIFIC_SITE")
+fi
+
+for SITE in $SITES
 do
   VOLUME_DIR="/volumes/simple_sites/${SITE}"
   echo "Creating data directory for $SITE: ${VOLUME_DIR}"
