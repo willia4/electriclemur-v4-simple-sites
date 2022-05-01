@@ -26,6 +26,9 @@ jobs:
           test "$SSH_HOST" = "lemur-web01"
       - name: Deploy sites
         run: |
+          chmod +x ./deploy.sh
+          chmod +x ./deploy_crowglass.sh
+          
           ./deploy.sh ~/.ssh/id
           ./deploy_crowglass.sh ~/.ssh/id
 
