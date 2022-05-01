@@ -20,8 +20,8 @@ for SITE in $(cat sites.json | jq -r '.sites | keys | .[]')
 do
   VOLUME_DIR="/volumes/simple_sites/${SITE}"
   echo "Creating data directory for $SITE: ${VOLUME_DIR}"
-  ssh root@v4.electriclemur.com -i "$SSH_KEY_PATH" "mkdir -p ${VOLUME_DIR}"
-  ssh root@v4.electriclemur.com -i "$SSH_KEY_PATH" "chmod -R a+rwx ${VOLUME_DIR}"
+  ssh root@v4.electriclemur.com -v -i "$SSH_KEY_PATH" "mkdir -p ${VOLUME_DIR}"
+  ssh root@v4.electriclemur.com -v -i "$SSH_KEY_PATH" "chmod -R a+rwx ${VOLUME_DIR}"
 
   SITE_HOST=$(cat sites.json | jq -r ".sites[\"${SITE}\"].hostname")
 
