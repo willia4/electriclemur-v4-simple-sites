@@ -37,6 +37,15 @@ fi
   CMD+="--label 'traefik.http.routers.${SITE}_redirect.middlewares=${SITE}_redirect' "
   CMD+="--label 'traefik.http.middlewares.${SITE}_redirect.redirectscheme.scheme=https' "
   
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.entrypoints=websecure' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.rule=(Host(\`www.${SITE_HOST}\`))' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.tls=true' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.tls.certresolver=le' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.middlewares=${SITE}_www_redirect' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_www_redirect.redirectregex.permanent=true' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_www_redirect.redirectregex.regex=^https?://www\\.(.+)' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_www_redirect.redirectregex.replacement=https://\${1}' "
+
   CMD+="-e REDIRECT_TARGET=crowglassdesign.com "
   CMD+="willia4/docker-web-redirect:0.0.1 "
 

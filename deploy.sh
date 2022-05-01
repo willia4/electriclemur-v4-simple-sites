@@ -46,10 +46,19 @@ do
   CMD+="--label 'traefik.http.routers.${SITE}.tls=true' "
   CMD+="--label 'traefik.http.routers.${SITE}.tls.certresolver=le' "
 
-  CMD+="--label 'traefik.http.routers.${SITE}_redirect.entrypoints=web' "
-  CMD+="--label 'traefik.http.routers.${SITE}_redirect.rule=Host(\`${SITE_HOST}\`)' "
-  CMD+="--label 'traefik.http.routers.${SITE}_redirect.middlewares=${SITE}_redirect' "
-  CMD+="--label 'traefik.http.middlewares.${SITE}_redirect.redirectscheme.scheme=https' "
+  CMD+="--label 'traefik.http.routers.${SITE}_http_redirect.entrypoints=web' "
+  CMD+="--label 'traefik.http.routers.${SITE}_http_redirect.rule=(Host(\`${SITE_HOST}\`) || Host(\`www.${SITE_HOST}\`))' "
+  CMD+="--label 'traefik.http.routers.${SITE}_http_redirect.middlewares=${SITE}_http_redirect' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_http_redirect.redirectscheme.scheme=https' "
+
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.entrypoints=websecure' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.rule=(Host(\`www.${SITE_HOST}\`))' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.tls=true' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.tls.certresolver=le' "
+  CMD+="--label 'traefik.http.routers.${SITE}_www_redirect.middlewares=${SITE}_www_redirect' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_www_redirect.redirectregex.permanent=true' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_www_redirect.redirectregex.regex=^https?://www\\.(.+)' "
+  CMD+="--label 'traefik.http.middlewares.${SITE}_www_redirect.redirectregex.replacement=https://\${1}' "
 
   CMD+="-v ${VOLUME_DIR}:/var/www "
   CMD+="willia4/nginx_static_php:3.0.1 "
