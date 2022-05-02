@@ -26,7 +26,7 @@ fi
   fi
 
   CMD=""
-  CMD+="docker run -d --name redirect_${SITE} "
+  CMD+="docker run -d --name redirect_${SITE} --restart=always "
   CMD+="--label 'traefik.http.routers.${SITE}.entrypoints=websecure' "
   CMD+="--label 'traefik.http.routers.${SITE}.rule=Host(\`${SITE_HOST}\`)' "
   CMD+="--label 'traefik.http.routers.${SITE}.tls=true' "

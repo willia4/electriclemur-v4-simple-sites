@@ -40,7 +40,7 @@ do
   echo "Creating container for ${SITE_HOST}"
 
   CMD=""
-  CMD+="docker run -d --name site_${SITE} "
+  CMD+="docker run -d --name site_${SITE} --restart=always "
   CMD+="--label 'traefik.http.routers.${SITE}.entrypoints=websecure' "
   CMD+="--label 'traefik.http.routers.${SITE}.rule=Host(\`${SITE_HOST}\`)' "
   CMD+="--label 'traefik.http.routers.${SITE}.tls=true' "
