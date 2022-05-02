@@ -31,7 +31,7 @@ do
 
   SITE_HOST=$(cat sites.json | jq -r ".sites[\"${SITE}\"].hostname")
 
-  CONTAINER_ID=$(ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker ps --filter 'name=site_${SITE}' -q")
+  CONTAINER_ID=$(ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker ps -a --filter 'name=site_${SITE}' -q")
   if [[ -n "$CONTAINER_ID" ]]; then
     echo "site_${SITE} container already exists; removing it"
     ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker rm --force site_${SITE}" > /dev/null
