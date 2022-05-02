@@ -19,11 +19,10 @@ fi
   SITE="crowglass_com"
   SITE_HOST="crowglass.com"
 
-  CONTAINER_ID=$(ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker ps -a --filter 'name=redirect_${SITE}' -q")
-  if [[ -n "$CONTAINER_ID" ]]; then
-    echo "redirect_${SITE} container already exists; removing it"
-    ssh "root@v4.electriclemur.com" -i "$SSH_KEY_PATH" "docker rm --force redirect_${SITE}" > /dev/null
-  fi
+  echo "removing redirect_${SITE} container if it exists"
+  ssh root@v4.electriclemur.com -i "$SSH_KEY_PATH" "docker rm -f redirect_${SITE} 2> /dev/null 1> /dev/null"
+  
+  echo "Creating container redirect_${SITE} for ${SITE_HOST}"
 
   CMD=""
   CMD+="docker run -d --name redirect_${SITE} --restart=always "
